@@ -20,6 +20,7 @@ gene_names(1:4,:) = [];
 
 % We are putting all the normalized gene expression next to eachother basically
 % One sample per column, one gene per row
+% The gene expression values need to be log2
 tpm_c = [cancer_1.tpm_unstranded,cancer_2.tpm_unstranded,cancer_3.tpm_unstranded,cancer_4.tpm_unstranded,cancer_5.tpm_unstranded,cancer_6.tpm_unstranded];
 tpm_c(1:4,:) = [];
 tpm_c = log2(tpm_c);
@@ -28,11 +29,13 @@ tpm_h = [healthy_1.tpm_unstranded,healthy_2.tpm_unstranded,healthy_3.tpm_unstran
 tpm_h(1:4,:) = [];
 tpm_h = log2(tpm_h);
 
+% Run the two sample t-test
 h = zeros(60660,1);
 p = zeros(60660,1);
 for ii = 1:length(tpm_h)
     [h(ii), p(ii)] = ttest2(tpm_h(ii,:), tpm_c(ii,:));
 end
 
+% Plot the Volcano Plot
 mavolcanoplot(tpm_c,tpm_h,p,'Labels',gene_names)
 
